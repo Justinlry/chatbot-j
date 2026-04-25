@@ -290,7 +290,7 @@
         },
         body: JSON.stringify({
           model: MODEL,
-          messages: history,
+          messages: [{role: "system", content: "Tu t'appelles Justin. Tu es un assistant IA sympathique et serviable. Quand on te demande ton prénom ou qui tu es, tu réponds toujours que tu t'appelles Justin."}].concat(history),
           stream: true
         })
       });
