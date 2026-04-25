@@ -7,8 +7,10 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
     },
-    body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages, stream: false })
+    body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages, stream: true })
   });
-  const data = await response.json();
-  res.status(200).json(data);
+  res.setHeader('Content-Type', 'text/event-stream');
+  response.body.pipeTo(new WritableStream({
+    write(chunk) { res.write(chunk); }
+  })).then(() => res.end());
 }
