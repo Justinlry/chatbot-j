@@ -355,10 +355,13 @@
                  || voices.find(v => v.lang.startsWith('fr'));
     if (frVoice) utterance.voice = frVoice;
  
-    utterance.onstart = () => document.getElementById('speakingIndicator').classList.add('visible');
+    utterance.onstart = () => {
+  document.getElementById('speakingIndicator').classList.add('visible');
+  if (isRecording) stopRecording();
+};
     utterance.onend = () => {
   document.getElementById('speakingIndicator').classList.remove('visible');
-  if (isConversationMode && voiceEnabled) setTimeout(() => startRecording();
+  if (isConversationMode && voiceEnabled) setTimeout(() => startRecording(), 300);
 };
     utterance.onerror = () => document.getElementById('speakingIndicator').classList.remove('visible');
  
