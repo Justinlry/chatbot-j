@@ -277,6 +277,7 @@
   // ===== VOIX =====
   let voiceEnabled = true;        // Justin parle par défaut
   let isRecording = false;
+  let isConversationMode = false;
   let recognition = null;
   let currentUtterance = null;
  
@@ -301,14 +302,23 @@
       sendMessage();
     };
     r.onerror = () => stopRecording();
-    r.onend = () => stopRecording();
+    r.onend = () => {
+  stopRecording();
+  if (isConversationMode) setTimeout(() => startRecording(), 800);
+};
     return r;
   }
  
   function toggleMic() {
-    if (isRecording) { stopRecording(); return; }
-    startRecording();
+  if (isConversationMode) {
+    isConversationMode = false;
+    stopRecording();
+    stopSpeaking();
+    return;
   }
+  isConversationMode = true;
+  startRecording();
+}
  
   function startRecording() {
     if (!recognition) recognition = initSpeechRecognition();
@@ -346,7 +356,10 @@
     if (frVoice) utterance.voice = frVoice;
  
     utterance.onstart = () => document.getElementById('speakingIndicator').classList.add('visible');
-    utterance.onend = () => document.getElementById('speakingIndicator').classList.remove('visible');
+    utterance.onend = () => {
+  document.getElementById('speakingIndicator').classList.remove('visible');
+  if (isConversationMode && voiceEnabled) setTimeout(() => startRecording(), 500);
+};
     utterance.onerror = () => document.getElementById('speakingIndicator').classList.remove('visible');
  
     currentUtterance = utterance;
