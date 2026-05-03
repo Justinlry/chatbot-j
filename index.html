@@ -357,20 +357,12 @@
  
     utterance.onstart = () => {
   document.getElementById('speakingIndicator').classList.add('visible');
-  try { if(recognition) recognition.stop(); } catch(e) {}
-  isRecording = false;
+  isLoading = true;
 };
-
-utterance.onend = () => {
+   utterance.onend = () => {
   document.getElementById('speakingIndicator').classList.remove('visible');
   isLoading = false;
-  if (isConversationMode && voiceEnabled) {
-    setTimeout(() => {
-      recognition = initSpeechRecognition();
-      startRecording();
-    }, 800);
-  }
-};
+  if (isConversationMode && voiceEnabled) setTimeout(() => startRecording(), 500);
 };
     utterance.onerror = () => document.getElementById('speakingIndicator').classList.remove('visible');
  
