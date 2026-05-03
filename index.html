@@ -279,7 +279,6 @@
   let isRecording = false;
   let recognition = null;
   let currentUtterance = null;
-  let isConversationMode = false;
  
   // Initialiser la reconnaissance vocale
   function initSpeechRecognition() {
@@ -307,17 +306,8 @@
   }
  
   function toggleMic() {
-  if (isConversationMode) {
-    isConversationMode = false;
-    stopRecording();
-    stopSpeaking();
-    document.getElementById('micBtn').style.background = '';
-    return;
-  }
-  isConversationMode = true;
-  document.getElementById('micBtn').style.background = 'var(--green)';
-  startRecording();
-}
+    if (isRecording) { stopRecording(); return; }
+    startRecording();
   }
  
   function startRecording() {
@@ -356,10 +346,7 @@
     if (frVoice) utterance.voice = frVoice;
  
     utterance.onstart = () => document.getElementById('speakingIndicator').classList.add('visible');
-    utterance.onend = () => {
-  document.getElementById('speakingIndicator').classList.remove('visible');
-  if (voiceEnabled && isConversationMode) setTimeout(() => startRecording(), 500);
-};
+    utterance.onend = () => document.getElementById('speakingIndicator').classList.remove('visible');
     utterance.onerror = () => document.getElementById('speakingIndicator').classList.remove('visible');
  
     currentUtterance = utterance;
