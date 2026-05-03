@@ -358,7 +358,7 @@
     utterance.onstart = () => document.getElementById('speakingIndicator').classList.add('visible');
     utterance.onend = () => {
   document.getElementById('speakingIndicator').classList.remove('visible');
-  if (isConversationMode && voiceEnabled) setTimeout(() => startRecording(), 2000;
+  if (isConversationMode && voiceEnabled) setTimeout(() => startRecording();
 };
     utterance.onerror = () => document.getElementById('speakingIndicator').classList.remove('visible');
  
